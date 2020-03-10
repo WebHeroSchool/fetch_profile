@@ -22,7 +22,6 @@ fetch(`https://api.github.com/users/${name}`)
             let getImage = () => {
                 let photo = document.querySelector('.photo');
                 photo.src = json.avatar_url;
-                //photo.innerHTML = photo;
             }
 
             let getName = () => {
