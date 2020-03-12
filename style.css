@@ -1,0 +1,21 @@
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+
+}
+.name {
+    font-family: "Century Gothic";
+    font-weight: bold;
+}
+
+.photo {
+
+}
+
+.info {
+    font:   bold italic 14px "Century Gothic", serif;
+}
