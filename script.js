@@ -1,23 +1,37 @@
 const url = window.location.toString();
 let getUserName = function(url) {
-    let arrFromUrl = url.split('=');
-    let userName = arrFromUrl[1];
+    let userName = url.split('=')[1];
     if (userName  == undefined) {
         userName = 'galigalinochka';
     }
     return userName;
 }
-
+const getDate = new Promise((resolve, reject) => {
+    setTimeout(() => {
+            let date = new Date();
+            let time = document.getElementById('time');
+            time.innerHTML = date;
+            date ? resolve(date) : reject('Время не определено')},
+        3000)
+})
+console.log(getDate);
 let name = getUserName(url);
+console.log(name);
 
-fetch(`https://api.github.com/users/${name}`)
-    .then(response => {
+let getProfileInfo = fetch(`https://api.github.com/users/${name}`)
+console.log(getProfileInfo);
+Promise.all([getDate, getProfileInfo])
+    .then(([newDate, request]) => {
+        userData = request;
+        currentDate = newDate;})
+    .then(() => {
+       response = request.json();
         if (response.status != 200) {
             return null;
         } else {
-            return response.json();
+         return request.json();
         }
-    })
+})
     .then(json => {
             let getImage = () => {
                 let photo = document.querySelector('.photo');
@@ -44,7 +58,7 @@ fetch(`https://api.github.com/users/${name}`)
             getImage();
             getName();
             getInfo();
-    })
+        })
     .catch(err => alert('Информация о пользователе не доступна'));
 
 
