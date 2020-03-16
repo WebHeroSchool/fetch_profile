@@ -24,8 +24,8 @@ Promise.all([getDate, getProfileInfo])
     .then(([date, request]) => {
         let res = request.json();
         console.log(res);
-        if (res.status != 200) {
-            console.log('mistake');
+        if (request.status != 200) {
+            return null;
         } else {
             return res;
         }
@@ -51,12 +51,7 @@ Promise.all([getDate, getProfileInfo])
             let getInfo = () => {
                 let info = document.querySelector('.info');
                 info.innerHTML = json.bio;
-            } // else
-               // {
-                  //  alert('Информация о пользователе не доступна');
-               // }
-
-
+            } 
             getImage();
             getName();
             getInfo();
