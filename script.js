@@ -21,18 +21,17 @@ console.log(name);
 let getProfileInfo = fetch(`https://api.github.com/users/${name}`)
 console.log(getProfileInfo);
 Promise.all([getDate, getProfileInfo])
-    .then(([newDate, request]) => {
-        userData = request;
-        currentDate = newDate;})
-    .then(() => {
-       response = request.json();
-        if (response.status != 200) {
-            return null;
+    .then(([date, request]) => {
+        let res = request.json();
+        console.log(res);
+        if (res.status != 200) {
+            console.log('mistake');
         } else {
-         return request.json();
+            return res;
         }
-})
+    })
     .then(json => {
+        let theName = json.name;
             let getImage = () => {
                 let photo = document.querySelector('.photo');
                 photo.src = json.avatar_url;
@@ -41,7 +40,7 @@ Promise.all([getDate, getProfileInfo])
             let getName = () => {
                 let user = document.querySelector('.name');
                 let link = document.querySelector('.link');
-                let theName = json.name;
+
                 user.innerHTML = theName;
                 link.href = json.html_url;
                 if (theName === null) {
@@ -52,13 +51,17 @@ Promise.all([getDate, getProfileInfo])
             let getInfo = () => {
                 let info = document.querySelector('.info');
                 info.innerHTML = json.bio;
-            }
+            } // else
+               // {
+                  //  alert('Информация о пользователе не доступна');
+               // }
 
 
             getImage();
             getName();
             getInfo();
         })
+
     .catch(err => alert('Информация о пользователе не доступна'));
 
 
