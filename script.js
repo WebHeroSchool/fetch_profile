@@ -1,24 +1,35 @@
 const url = window.location.toString();
 let getUserName = function(url) {
-    let arrFromUrl = url.split('=');
-    let userName = arrFromUrl[1];
+    let userName = url.split('=')[1];
     if (userName  == undefined) {
         userName = 'galigalinochka';
     }
     return userName;
 }
+const getDate = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        let date = new Date();
+        let time = document.getElementById('time');
+        time.innerHTML = date;
+        date ? resolve(date) : reject('Время не определено')},
+        3000)
+})
 
 let name = getUserName(url);
 
-fetch(`https://api.github.com/users/${name}`)
-    .then(response => {
-        if (response.status != 200) {
+let getProfileInfo = fetch(`https://api.github.com/users/${name}`)
+
+Promise.all([getDate, getProfileInfo])
+    .then(([date, request]) => {
+        let res = request.json();
+        if (request.status != 200) {
             return null;
         } else {
-            return response.json();
+            return res;
         }
     })
     .then(json => {
+        let theName = json.name;
             let getImage = () => {
                 let photo = document.querySelector('.photo');
                 photo.src = json.avatar_url;
@@ -27,7 +38,6 @@ fetch(`https://api.github.com/users/${name}`)
             let getName = () => {
                 let user = document.querySelector('.name');
                 let link = document.querySelector('.link');
-                let theName = json.name;
                 user.innerHTML = theName;
                 link.href = json.html_url;
                 if (theName === null) {
@@ -40,11 +50,14 @@ fetch(`https://api.github.com/users/${name}`)
                 info.innerHTML = json.bio;
             }
 
+            let preloader = document.getElementById('preloader');
+            preloader.classList.add('hidden');
 
             getImage();
             getName();
             getInfo();
-    })
+        })
+
     .catch(err => alert('Информация о пользователе не доступна'));
 
 
